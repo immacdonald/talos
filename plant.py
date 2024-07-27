@@ -33,22 +33,28 @@ def interactWithImage(image, region = (0, 50 * 2, 1100 * 2, 800 * 2)):
     print(f"Finished search for {image.filename} in {end_search - start_search:0.2f} seconds")
     #print(f' {image} is at {location}')
     if location is None:
-        print(f'Failed to find {image}')
+        print(f'Failed to find {image.filename}')
         return False
     
     clickLocation(location=location)
-    end_interact = time.perf_counter()
-    print(f"Finished interaction of {image.filename} in {end_interact - end_search:0.2f} seconds")
+    #end_interact = time.perf_counter()
+    #print(f"Finished interaction of {image.filename} in {end_interact - end_search:0.2f} seconds")
     return location
 
+from pynput.mouse import Button, Controller
+_mouse = Controller()
 
 def clickLocation(location):
-    pyautogui.leftClick(location.x // 2, location.y // 2) 
+    _mouse.position = (location.x // 2, location.y // 2) 
+    time.sleep(0.1)
+    _mouse.click(Button.left)
 
 def clickXYLocation(x, y, delay: float = 0):
+    _mouse.position = (x // 2, y // 2) 
     if delay > 0:
         time.sleep(delay)
-    pyautogui.leftClick(x // 2, y // 2) 
+    
+    _mouse.click(Button.left)
 
 
 def plant_cycle():
@@ -57,7 +63,7 @@ def plant_cycle():
         return False
     if interactWithImage(PLACE_IN_NURSERY, region=(720, 1320, 650, 100)) is False:
         return False
-    clickXYLocation(x=breeding_cave.x, y=breeding_cave.y + 12, delay=0.2)
+    clickXYLocation(x=breeding_cave.x, y=breeding_cave.y + 24, delay=0.4)
     if interactWithImage(BREED_RETRY, region=(400, 1400, 300, 300)) is False:
         return False
     if interactWithImage(BREED, region=(830, 1300, 440, 140)) is False:
