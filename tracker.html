@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkbox Grid</title>
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: repeat(4, auto);
+            gap: 10px;
+            margin: 20px;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Checkboxes will be inserted here by JavaScript -->
+    </div>
+
+    <script>
+        const container = document.querySelector('.container');
+        const startNumbers = [1, 22, 43, 64];
+
+        // Function to create a checkbox with a label
+        const createCheckbox = (labelText) => {
+            const label = document.createElement('label');
+            label.className = 'checkbox-label';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(` ${labelText}`));
+            return label;
+        };
+
+        // Generate checkboxes
+        for (let i = 0; i < 21; i++) { // Adjust the number of rows as needed
+            startNumbers.forEach((startNumber, index) => {
+                const label = createCheckbox(startNumber + i);
+                container.appendChild(label);
+            });
+        }
+    </script>
+</body>
+</html>
