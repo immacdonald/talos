@@ -11,7 +11,7 @@ IMAGES = {
     "BREEDING_CAVE": cv2.imread("./images/breeding_cave.png", 0),
     "BREED_RETRY": cv2.imread("./images/breed_retry.png", 0),
     "BREED": cv2.imread("./images/breed.png", 0),
-    "NURSERY": cv2.imread("./images/nursery.png", 0),
+    "NURSERY": cv2.imread("./images/nursery_small.png", 0),
     "PLANT_EGG": cv2.imread("./images/plant_egg.png", 0),
     "SELL_EGG": cv2.imread("./images/sell_egg.png", 0),
     "CONFIRM_SELL": cv2.imread("./images/confirm_sell.png", 0),
@@ -83,11 +83,11 @@ def plant_cycle(delay=0.7, short_delay=0.4):
             IMAGES["BREED_COMPLETE"],
             name="breed_complete",
             region=complete_region,
-            retries=25,
+            retries=30,
         )
         if breeding_cave is False:
             return False
-        sleep(short_delay)
+        sleep(delay)
         if interact_with_image(
             IMAGES["PLACE_IN_NURSERY"],
             name="place_in_nursery",
@@ -102,7 +102,7 @@ def plant_cycle(delay=0.7, short_delay=0.4):
         ):
             sleep(delay)
             if interact_with_image(
-                IMAGES["BREED_RETRY"], name="breed_retry", region=(420, 1440, 720, 1820)
+                IMAGES["BREED_RETRY"], name="breed_retry"
             ):
                 sleep(short_delay)
                 if interact_with_image(
@@ -111,17 +111,17 @@ def plant_cycle(delay=0.7, short_delay=0.4):
                     return True
         return False
 
-    def nursery_sequence(nursery_region=(1320, 880, 1400, 980)):
+    def nursery_sequence(nursery_region=(1320, 880, 1600, 1280)):
         if interact_with_image(
             IMAGES["NURSERY"], name="nursery", region=nursery_region, retries=15
         ):
-            sleep(1.5)
+            sleep(1)
             if interact_with_image(
-                IMAGES["PLANT_EGG"], name="plant_egg", region=(0, 1400, 300, 1800)
+                IMAGES["PLANT_EGG"], name="plant_egg", region=(0, 1400, 500, 1900)
             ):
                 sleep(short_delay)
                 if interact_with_image(
-                    IMAGES["SELL_EGG"], name="sell_egg", region=(1200, 960, 1540, 1340)
+                    IMAGES["SELL_EGG"], name="sell_egg", region=(1100, 960, 1740, 1340)
                 ):
                     return True
         return False
@@ -165,12 +165,16 @@ def format_time(elapsed):
 
 def main():
     print("Starting in 3")
-    sleep(1)
+    sleep(1) 
     print("Starting in 2")
     sleep(1)
     print("Starting in 1")
     sleep(1)
     print("Activating Dragonvale Plant Cycler v1.0")
+
+    double_day = True
+    double_value = 2 if double_day else 1
+    currency = 'candy corn'
 
     start_time = time()
 
@@ -178,13 +182,14 @@ def main():
         start_cycle = perf_counter()
         success = plant_cycle()
         end_cycle = perf_counter()
+        ec_count = (i + 1) * 3 * double_value
         if success:
             print(
-                f"Cycle {i + 1} in {end_cycle - start_cycle:0.2f}s, total of {(i + 1) * 6} doubloons over {format_time(time() - start_time)}"
+                f"Cycle {i + 1} in {end_cycle - start_cycle:0.2f}s, total of {ec_count} {currency} over {format_time(time() - start_time)}"
             )
         else:
             print(
-                f"Terminated at cycle {i + 1} for a total of {(i + 1) * 6} doubloons over {format_time(time() - start_time)}"
+                f"Terminated at cycle {i + 1} for a total of {ec_count} {currency} over {format_time(time() - start_time)}"
             )
             return
 
